@@ -14,11 +14,11 @@ class FormViewModel: ObservableObject {
     @Published var age: String = ""
     @Published var jobRole: String = ""
     @Published var package: String = ""
+    @Published var experience: String = ""
     @Published var FetchedData :[FormData] = []
     @Published var errorMessage = ""
     
-    private let apiKey = "$2a$10$p2ZVUCC1dHhqrAirIBsvUejVr1/EYo.jtMbUQFHAMI9xUQSPEpcc2"
-    private let binID = "678fc638e41b4d34e47c5ede"
+   
     
     func submitFormData() async throws {
         let data = try validateAndConvertData()
@@ -28,6 +28,7 @@ class FormViewModel: ObservableObject {
             "name": data.name,
             "age": data.age,
             "jobRole": data.jobRole,
+            "experience": data.experience,
             "package": data.package
         ]
         
@@ -63,7 +64,7 @@ class FormViewModel: ObservableObject {
         }
     }
     
-    func fetchBinData() async {
+    func fetchApiData() async {
             guard let url = URL(string:"https://678fcd1749875e5a1a9369db.mockapi.io/salman/api/users") else {
                 errorMessage = "Invalid URL"
                 return
@@ -107,11 +108,11 @@ class FormViewModel: ObservableObject {
     
     
     private func validateAndConvertData() throws -> FormData {
-        guard let Age = Int(age), let package = Int(package), !name.isEmpty, !jobRole.isEmpty else{
+        guard let Age = Int(age), let package = Int(package), let exp = Int(experience), !name.isEmpty, !jobRole.isEmpty else{
             throw NSError(domain: "Form Data Invalid", code: 1)
         }
         
-        let formData = FormData(name: name, age: Age, jobRole: jobRole, package: package)
+        let formData = FormData(name: name, age: Age, jobRole: jobRole, experience: exp, package: package)
         
         return formData
     }
