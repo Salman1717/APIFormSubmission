@@ -35,7 +35,7 @@ struct FormView: View {
                 }
                 .padding(.horizontal)
                 .padding(.top)
-                   
+                
                 
                 customTextFiled(feildFor: $viewModel.name, title: "Your Name")
                 
@@ -70,9 +70,14 @@ struct FormView: View {
                     .padding(.bottom)
                 
                 
-                    
+                
                 Spacer()
                 
+            }
+            .overlay{
+                if viewModel.showErrorMessage{
+                    SnackBar(showSnackBar: $viewModel.showErrorMessage, text: viewModel.errorMessage)
+                }
             }
             
         }

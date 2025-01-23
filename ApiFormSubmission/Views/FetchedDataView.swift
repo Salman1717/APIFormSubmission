@@ -32,6 +32,12 @@ struct FetchedDataView: View {
                     
                 Spacer()
             }
+            .overlay{
+                if viewModel.showErrorMessage{
+                    SnackBar(showSnackBar: $viewModel.showErrorMessage, text: viewModel.errorMessage)
+                    
+                }
+            }
             .overlay(alignment: .bottomTrailing){
                 showFormButton()
             }
@@ -70,6 +76,7 @@ struct FetchedDataView: View {
                 showForm = true
             }
     }
+    
 }
 
 #Preview {
