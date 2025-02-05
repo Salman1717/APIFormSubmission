@@ -19,13 +19,13 @@ struct FetchedDataView: View {
                     .fontWeight(.heavy)
                     .bold()
                     .foregroundStyle(.accent)
-                    .frame(maxWidth: .infinity,alignment: .leading)
+                    .frame(maxWidth: .infinity,alignment: .leading) 
                     .padding()
                 
                 ScrollView(.vertical){
                     VStack(spacing: 10){
                         ForEach(viewModel.FetchedData, id: \.self){ data in
-                            InformationCardView(data: data)
+                            InformationCardView(viewModel: viewModel, data: data)
                         }
                     }
                 }

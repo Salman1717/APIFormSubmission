@@ -113,6 +113,47 @@ class FormViewModel: ObservableObject {
             }
         }
     
+//MARK: - Delete Data From Server
+    func deleteData(id: Int) async throws {
+        guard let url = URL(string: "https://678fcd1749875e5a1a9369db.mockapi.io/salman/api/users/\(id)") else {
+            errorMessage = "Invalid URL"
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let (_, response) = try await URLSession.shared.data(for: request)
+            
+            guard let httpResponse = response as? HTTPURLResponse else {
+                self.errorMessage = "Invalid response type"
+                self.showErrorMessage = true
+                return
+            }
+            
+            switch httpResponse.statusCode {
+            case 200:
+                self.errorMessage = "Data Deleted Successfully"
+                self.showErrorMessage = true
+                await fetchApiData()
+                
+            case 404:
+                self.errorMessage = "User not found"
+                self.showErrorMessage = true
+                
+            default:
+                self.errorMessage = "Server returned status code: \(httpResponse.statusCode)"
+                self.showErrorMessage = true
+            }
+        } catch {
+            self.errorMessage = "Network error: \(error.localizedDescription)"
+            self.showErrorMessage = true
+            throw error
+        }
+    }
+    
 //MARK: - private validation function
     private func validateAndConvertData() throws -> FormData {
         
@@ -122,7 +163,7 @@ class FormViewModel: ObservableObject {
             throw NSError(domain: "Invalid Form Data", code: 1)
         }
         
-        let formData = FormData(name: name, age: Age, jobRole: jobRole, experience: exp, package: package)
+        let formData = FormData(id: "", name: name, age: Age, jobRole: jobRole, experience: exp, package: package)
         
         return formData
     }

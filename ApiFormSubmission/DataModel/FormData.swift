@@ -8,6 +8,7 @@
 import Foundation
 
 struct FormData: Decodable,Hashable{
+    var id: String
     var name: String
     var age: Int
     var jobRole: String

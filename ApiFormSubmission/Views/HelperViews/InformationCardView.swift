@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct InformationCardView: View {
+    @ObservedObject var viewModel: FormViewModel
     var data: FormData
     var body: some View {
         
@@ -60,6 +61,45 @@ struct InformationCardView: View {
                 
             }
             .padding(.horizontal)
+            
+            HStack{
+                Image(systemName: "pencil")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(.primaryText)
+                    .padding()
+                    .background{
+                        Circle()
+                            .foregroundStyle(
+                                Color(.gradient1)
+                                    .shadow(.inner(color:.white,radius: 2))
+                                    .shadow(.drop(color:.shadow,radius: 10,x:8,y:8))
+                            )
+                    }
+                Spacer()
+                
+                Image(systemName: "trash")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 20, height: 20)
+                    .foregroundStyle(.red)
+                    .padding()
+                    .background{
+                        Circle()
+                            .foregroundStyle(
+                                Color(.gradient1)
+                                    .shadow(.inner(color:.white,radius: 2))
+                                    .shadow(.drop(color:.shadow,radius: 10,x:8,y:8))
+                            )
+                    }
+                    .onTapGesture {
+                        Task{
+                            try await viewModel.deleteData(id: Int(data.id) ?? 0)
+                        }
+                    }
+            }
+            .padding(.horizontal)
         }
         .padding()
         .background{
@@ -81,5 +121,5 @@ struct InformationCardView: View {
 }
 
 #Preview {
-    InformationCardView(data: FormData(name: "Salman Mhaskar", age: 22, jobRole: "iOS Developer", experience: 2, package: 1200000))
+    InformationCardView(viewModel: FormViewModel(), data: FormData(id: "1", name: "Salman Mhaskar", age: 22, jobRole: "iOS Developer", experience: 2, package: 1200000))
 }
